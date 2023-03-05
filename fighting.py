@@ -1,6 +1,6 @@
 import random
 
-def Fight(p1, p2):
+def Fight(p1, p2, print_updates = True):
     events = []
 
     if p1.speed > p2.speed:
@@ -29,11 +29,9 @@ def Fight(p1, p2):
             continue
 
         # if we're here, the fight is over
-        for x in events:
-            print(x)
-        print('\n\nThe fight concludes!')
-        if p1.awake:
-            return(1)
-        return(2)
+        if print_updates:
+            print('\n\n')
+            for x in events:
+                print(x)
 
-
+        return(1 if p1.awake else 2)

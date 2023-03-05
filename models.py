@@ -21,8 +21,17 @@ class Fighter:
 
     def debug_entry(self, health=300, strength=50, speed=3):
         self.health = health
+        self.max_health = health
         self.strength = strength
         self.speed = speed
+
+    def reset(self):
+        """
+        Sets a fighter's stats back to their original values, as if no
+        fighting has happened
+        """
+        self.awake = True
+        self.health = self.max_health
 
     def damage(self, hit):
         """
