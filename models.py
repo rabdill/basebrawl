@@ -70,3 +70,26 @@ class Fighter:
                 break
             events.append(f'{self.name} hits {opponent.name} for {dam} damage! He has {opponent.health} points remaining.')
         return(events)
+
+class Team:
+    def __init__(self, name):
+        self.name = name
+        self.fighters = []
+
+    def add_fighter(self, x):
+        x.team = self.name
+        self.fighters.append(x)
+        random.shuffle(self.fighters)
+
+    def awake(self):
+        """
+        Returns only the awake members of the roster. There is NO
+        shuffling done in this step so the call will be deterministic.
+        """
+        return([x for x in self.fighters if x.awake])
+
+    def numawake(self):
+        """
+        Quick helper function to count the number of awake fighters
+        """
+        return(len(self.awake()))
