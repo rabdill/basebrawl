@@ -38,9 +38,21 @@ class Fighter:
         return(self.awake)
 
     def attack(self, opponent):
+        """
+        Calculates the impact of an attack against $opponent.
+
+        Returns:
+            - events: A list of strings indicating the results of each attack.
+        """
+
+        if not opponent.awake:
+            return([f'{opponent.name} is out cold. {self.name} won\'t attack.'])
+        if not self.awake:
+            return([f'{self.name} passes out before he can attack.'])
+
+        events = []
         # One "attack" could be multiple hits. The max number of hits is decided
         # by the fighter's speed trait.
-        events = []
         attacks = random.randint(1, self.speed)
         for x in range(attacks):
             dam = random.randint(0, self.strength)
