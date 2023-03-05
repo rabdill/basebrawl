@@ -19,16 +19,21 @@ def Fight(p1, p2):
     events.append(f'{attacker.name} gets the jump on {defender.name} and attacks first:')
 
     while True:
-        events.append(attacker.attack(defender))
-        if not p1.awake or not p2.awake:
-            for x in events:
-                print(x)
-            print('\n\nThe fight concludes!')
-            if p1.awake:
-                return(1)
-            return(2)
+        events += attacker.attack(defender)
 
-        # if we go for another round, swap attacker and defender
-        buffer = attacker
-        attacker = defender
-        defender = buffer
+        if p1.awake and p2.awake:
+            # if we go for another round, swap attacker and defender
+            buffer = attacker
+            attacker = defender
+            defender = buffer
+            continue
+
+        # if we're here, the fight is over
+        for x in events:
+            print(x)
+        print('\n\nThe fight concludes!')
+        if p1.awake:
+            return(1)
+        return(2)
+
+

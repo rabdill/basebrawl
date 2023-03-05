@@ -1,9 +1,8 @@
 import random
 
 class Fighter:
-    def __init__(self, name, team):
+    def __init__(self, name):
         self.name = name
-        self.team = team
         self.awake = True
         pass
 
@@ -20,10 +19,10 @@ class Fighter:
             data - Parses a single line of the statcast CSV pitching data.
         """
 
-    def debug_entry(self):
-        self.health = 100
-        self.strength = 50
-        self.speed = 50
+    def debug_entry(self, health=300, strength=50, speed=3):
+        self.health = health
+        self.strength = strength
+        self.speed = speed
 
     def damage(self, hit):
         """
@@ -39,25 +38,14 @@ class Fighter:
         return(self.awake)
 
     def attack(self, opponent):
-        dam = random.randrange(self.strength)
-        if not opponent.damage(dam):
-            return(f'{self.name} knocks out {opponent.name} after doing {dam} damage!')
-        return(f'{self.name} hits {opponent.name} for {dam} damage! He has {opponent.health} points remaining.')
-
-class Team:
-    def __init__(self, name):
-        self.name = name
-        self.fighters = []
-
-    def add(self, name):
-        """
-        Adds a player to the team's roster
-        """
-        self.fighters.append(name)
-
-    def survey_fighters(self):
-        """
-        Checks the current state of all member fighters and updates team-level
-        metrics such as how many members are awake.
-        """
-        pass
+        # One "attack" could be multiple hits. The max number of hits is decided
+        # by the fighter's speed trait.
+        events = []
+        attacks = random.randint(1, self.speed)
+        for x in range(attacks):
+            dam = random.randint(0, self.strength)
+            if not opponent.damage(dam):
+                events.append(f'{self.name} knocks out {opponent.name} after doing {dam} damage!')
+                break
+            events.append(f'{self.name} hits {opponent.name} for {dam} damage! He has {opponent.health} points remaining.')
+        return(events)
