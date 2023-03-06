@@ -9,3 +9,14 @@ def Fight(p1, p2, iterations):
     return(
         (results.count(1), results.count(2))
     )
+
+def Rumble(t1, t2, iterations):
+    results = []
+    for x in range(iterations):
+        for player in t1.fighters + t2.fighters:
+            player.reset()
+
+        results.append(fighting.Rumble(t1, t2, False))
+    return(
+        (results.count(1), results.count(2))
+    )

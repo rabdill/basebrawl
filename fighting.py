@@ -48,7 +48,7 @@ def Fight(p1, p2, print_updates = True):
 
         return(1 if p1.awake else 2)
 
-def Rumble(t1, t2):
+def Rumble(t1, t2, print_updates = True):
     """
     A fight between two TEAMS.
 
@@ -61,16 +61,20 @@ def Rumble(t1, t2):
     """
     round = 1
     while min(t1.numawake(), t2.numawake()) > 0:
-        print(f'\n\n\n=========\nROUND {round}:')
-        print(f'{t1.name}: {t1.numawake()} awake')
-        print(f'{t2.name}: {t2.numawake()} awake\n\n')
+        if print_updates:
+            print(f'\n\n\n=========\nROUND {round}:')
+            print(f'{t1.name}: {t1.numawake()} awake')
+            print(f'{t2.name}: {t2.numawake()} awake\n\n')
 
         fights = min(t1.numawake(), t2.numawake())
         t1f = t1.awake()
         t2f = t2.awake()
 
         for x in range(fights):
-            print(f'{x} of {fights}')
-            Fight(t1f[x], t2f[x])
+            Fight(t1f[x], t2f[x], print_updates)
 
         round += 1
+    # rumble is over
+    if t1.numawake() > 0:
+        return(1)
+    return(2)
