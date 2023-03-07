@@ -117,6 +117,7 @@ class RumbleReport:
         self.t1 = t1.name
         self.t2 = t2.name
         self.events = []
+        self.major_events = []
         self.winner = None
 
         self.matchups = {}
@@ -141,8 +142,11 @@ class RumbleReport:
 
         for x in self.events:
             print(x)
+        print('\n\nSummary:')
+        for x in self.major_events:
+            print(x)
 
-    def Save_fight(self, f1, f2, events):
+    def Save_fight(self, f1, f2, winner, events):
         """
         Ingests the events log from a one-on-one fight and saves the events
         both to the one long scroll (self.events) and the player-level lookups.
@@ -153,4 +157,14 @@ class RumbleReport:
         events: List of strings. Each an event in a fight between two fighters.
         """
         self.events += events
-        self.matchups[f1][f2].append(events)
+        self.matchups[f1.name][f2.name].append(events)
+
+        if winner == 1:
+            victor = f1.name
+            vteam = f1.team
+            loser = f2.name
+        else:
+            victor = f2.name
+            vteam = f2.team
+            loser = f1.name
+        self.major_events.append(f'{victor} of the {vteam} defeated {loser}.')

@@ -70,8 +70,8 @@ def Rumble(t1, t2):
         t2f = t2.awake()
 
         for x in range(fights):
-            _, fight_log = Fight(t1f[x], t2f[x])
-            report.Save_fight(t1f[x].name, t2f[x].name, fight_log)
+            winner, fight_log = Fight(t1f[x], t2f[x])
+            report.Save_fight(t1f[x], t2f[x], winner, fight_log)
 
         round += 1
     # rumble is over
