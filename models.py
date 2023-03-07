@@ -62,13 +62,28 @@ class Fighter:
         events = []
         # One "attack" could be multiple hits. The max number of hits is decided
         # by the fighter's speed trait.
-        attacks = random.randint(1, self.speed)
-        for x in range(attacks):
+        attacks_todo = random.randint(1, self.speed)
+
+        cumulative_dam = 0
+        attacks_done = 0
+        for x in range(attacks_todo):
             dam = random.randint(0, self.strength)
-            if not opponent.damage(dam):
-                events.append(f'{self.name} knocks out {opponent.name} after doing {dam} damage!')
+            cumulative_dam += dam
+            attacks_done += 1
+            opp_awake = opponent.damage(dam)
+            if not opp_awake:
                 break
-            events.append(f'{self.name} hits {opponent.name} for {dam} damage! He has {opponent.health} points remaining.')
+        if not opp_awake:
+            events.append(f'{self.name} knocks out {opponent.name} after doing {dam} damage in {attacks_done} hit{"s" if attacks_done > 1 else ""}!')
+            return(events)
+
+        descriptor = ','
+        if attacks_done == 2:
+            descriptor = ' twice,'
+        if attacks_done > 2:
+            descriptor = f' {attacks_done} times,'
+        events.append(f'{self.name} hits {opponent.name}{descriptor} doing {dam} damage! He has {opponent.health} points remaining.')
+
         return(events)
 
 class Team:
