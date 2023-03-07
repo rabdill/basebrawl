@@ -33,6 +33,8 @@ if __name__ == '__main__':
     farts.add_fighter(john)
     farts.add_fighter(hanratty)
 
-    fighting.Rumble(burps, farts)
+    report = fighting.Rumble(burps, farts)
+    report.Scroll()
+    print(report.winner)
     #results = simulation.Rumble(burps, farts, 1000)
     #print(f'\n\nBurps: {results[0]}\nFarts: {results[1]}')

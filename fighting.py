@@ -1,13 +1,14 @@
 import random
 
-def Fight(p1, p2, print_updates = True):
+import models
+
+def Fight(p1, p2):
     """
     A one-on-one fight between two players.
 
     Inputs:
     - p1: a Fighter object
     - p2: a Fighter object
-    - print_updates: Boolean indicating whether to print fight events to stdout
 
     Returns:
     - winner: Integer. 1 means p1 won, 2 means p2 won.
@@ -32,23 +33,18 @@ def Fight(p1, p2, print_updates = True):
 
     while True:
         events += attacker.attack(defender)
+        if not p1.awake or not p2.awake:
+            break
+        # if we go for another round, swap attacker and defender
+        buffer = attacker
+        attacker = defender
+        defender = buffer
 
-        if p1.awake and p2.awake:
-            # if we go for another round, swap attacker and defender
-            buffer = attacker
-            attacker = defender
-            defender = buffer
-            continue
+    # if we're here, the fight is over
+    result = 1 if p1.awake else 2
+    return(result, events)
 
-        # if we're here, the fight is over
-        if print_updates:
-            print('\n\n')
-            for x in events:
-                print(x)
-
-        return(1 if p1.awake else 2)
-
-def Rumble(t1, t2, print_updates = True):
+def Rumble(t1, t2):
     """
     A fight between two TEAMS.
 
@@ -59,22 +55,29 @@ def Rumble(t1, t2, print_updates = True):
     Returns:
     - winner: Integer. 1 means t1 won, 2 means t2 won.
     """
+    # First we create an object to save matchup logs
+    # for each fighter
+    report = models.RumbleReport(t1, t2)
+
     round = 1
     while min(t1.numawake(), t2.numawake()) > 0:
-        if print_updates:
-            print(f'\n\n\n=========\nROUND {round}:')
-            print(f'{t1.name}: {t1.numawake()} awake')
-            print(f'{t2.name}: {t2.numawake()} awake\n\n')
+        report.Record(f'\n\n\n=========\nROUND {round}:')
+        report.Record(f'{t1.name}: {t1.numawake()} awake')
+        report.Record(f'{t2.name}: {t2.numawake()} awake\n\n')
 
         fights = min(t1.numawake(), t2.numawake())
         t1f = t1.awake()
         t2f = t2.awake()
 
         for x in range(fights):
-            Fight(t1f[x], t2f[x], print_updates)
+            _, fight_log = Fight(t1f[x], t2f[x])
+            report.Save_fight(t1f[x].name, t2f[x].name, fight_log)
 
         round += 1
     # rumble is over
     if t1.numawake() > 0:
-        return(1)
-    return(2)
+        report.winner = t1.name
+    else:
+        report.winner = t2.name
+
+    return(report)

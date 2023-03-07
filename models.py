@@ -93,3 +93,49 @@ class Team:
         Quick helper function to count the number of awake fighters
         """
         return(len(self.awake()))
+
+class RumbleReport:
+    """
+    Stores the results of a team vs team matchup.
+    """
+    def __init__(self, t1, t2):
+        self.t1 = t1.name
+        self.t2 = t2.name
+        self.events = []
+        self.winner = None
+
+        self.matchups = {}
+        for player in t1.fighters + t2.fighters:
+            self.matchups[player.name] = {}
+            for p2 in t1.fighters + t2.fighters:
+                self.matchups[player.name][p2.name] = []
+
+    def Record(self, text):
+        """
+        Records a string as a new event in the main event scroll.
+
+        Input:
+        text: String. The full text of an event.
+        """
+        self.events.append(text)
+
+    def Scroll(self):
+        """
+        Prints out all events recorded for the rumble.
+        """
+
+        for x in self.events:
+            print(x)
+
+    def Save_fight(self, f1, f2, events):
+        """
+        Ingests the events log from a one-on-one fight and saves the events
+        both to the one long scroll (self.events) and the player-level lookups.
+
+        Input:
+        f1: String. Name of fighter 1.
+        f2: String. Name of fighter 2.
+        events: List of strings. Each an event in a fight between two fighters.
+        """
+        self.events += events
+        self.matchups[f1][f2].append(events)
