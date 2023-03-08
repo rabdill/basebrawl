@@ -39,3 +39,4 @@ if __name__ == '__main__':
 
     results = simulation.Rumble(burps, farts, int(sys.argv[1]))
     print(f'\n\nBurps: {results[0]}\nFarts: {results[1]}')
+    simulation.Generate_report(*results, burps, farts)
