@@ -41,7 +41,12 @@ def Fight(p1, p2):
         defender = buffer
 
     # if we're here, the fight is over
-    result = 1 if p1.awake else 2
+    if p1.awake:
+        result = 1
+        p1.defeats(p2)
+    else:
+        result = 2
+        p2.defeats(p1)
     return(result, events)
 
 def Rumble(t1, t2):

@@ -4,7 +4,8 @@ class Fighter:
     def __init__(self, name):
         self.name = name
         self.awake = True
-        pass
+        self.wins = []
+        self.losses = []
 
     def convert_batter(self, data):
         """
@@ -18,6 +19,7 @@ class Fighter:
         INPUT:
             data - Parses a single line of the statcast CSV pitching data.
         """
+        pass
 
     def debug_entry(self, health=300, strength=50, speed=3):
         self.health = health
@@ -67,7 +69,7 @@ class Fighter:
         cumulative_dam = 0
         attacks_done = 0
         for x in range(attacks_todo):
-            dam = random.randint(0, self.strength)
+            dam = random.randint(int(self.strength/4), self.strength)
             cumulative_dam += dam
             attacks_done += 1
             opp_awake = opponent.damage(dam)
@@ -85,6 +87,16 @@ class Fighter:
         events.append(f'{self.name} hits {opponent.name}{descriptor} doing {dam} damage! He has {opponent.health} points remaining.')
 
         return(events)
+
+    def defeats(self, opponent):
+        """
+        Convenience function that records fighter-level entries for the winner and loser.
+
+        Input:
+            - opponent: A Fighter object
+        """
+        self.wins.append(opponent.name)
+        opponent.losses.append(self.name)
 
 class Team:
     def __init__(self, name):
