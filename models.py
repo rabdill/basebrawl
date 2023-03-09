@@ -108,6 +108,12 @@ class Team:
         self.fighters.append(x)
         random.shuffle(self.fighters)
 
+    def shuffle(self):
+        """
+        Randomizes the fighter order in between rumbles.
+        """
+        random.shuffle(self.fighters)
+
     def awake(self):
         """
         Returns only the awake members of the roster. There is NO

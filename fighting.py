@@ -60,7 +60,10 @@ def Rumble(t1, t2):
     Returns:
     - winner: Integer. 1 means t1 won, 2 means t2 won.
     """
-    # First we create an object to save matchup logs
+    # Shuffle the team rosters at the beginning of the rumble
+    t1.shuffle()
+    t2.shuffle()
+    # Then create an object to save matchup logs
     # for each fighter
     report = models.RumbleReport(t1, t2)
 
