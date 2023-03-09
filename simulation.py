@@ -93,5 +93,6 @@ def Generate_report(t1_wins, t2_wins, results, t1, t2):
     #########
     # Write to file
     #########
-    with open("results.json", "w") as outfile:
+    with open("results.js", "w") as outfile:
+        outfile.write('data=')
         json.dump(to_record, outfile)
