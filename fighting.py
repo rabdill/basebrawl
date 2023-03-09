@@ -29,7 +29,7 @@ def Fight(p1, p2):
         else:
             attacker = p2
             defender = p1
-    events.append(f'{attacker.name} gets the jump on {defender.name} and attacks first:')
+    events.append(f'<br><br>{attacker.name} gets the jump on {defender.name} and attacks first:')
 
     while True:
         events += attacker.attack(defender)
@@ -66,9 +66,10 @@ def Rumble(t1, t2):
 
     round = 1
     while min(t1.numawake(), t2.numawake()) > 0:
-        report.Record(f'\n\n\n=========\nROUND {round}:')
-        report.Record(f'{t1.name}: {t1.numawake()} awake')
-        report.Record(f'{t2.name}: {t2.numawake()} awake\n\n')
+        report.Record_major(f'(Round {round})')
+        report.Record(f'<h4>Round {round}</h4>')
+        report.Record(f'<span class="team1"><strong>{t1.name}:</strong> {t1.numawake()} awake</span>')
+        report.Record(f'<span class="team2"><strong>{t2.name}:</strong> {t2.numawake()} awake</span>')
 
         fights = min(t1.numawake(), t2.numawake())
         t1f = t1.awake()

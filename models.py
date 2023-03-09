@@ -147,6 +147,16 @@ class RumbleReport:
         """
         self.events.append(text)
 
+    def Record_major(self, text):
+        """
+        Records a string as a new event in the MAJOR event scroll.
+
+        Input:
+        text: String. The full text of an event.
+        """
+        self.major_events.append(text)
+
+
     def Scroll(self):
         """
         Prints out all events recorded for the rumble.

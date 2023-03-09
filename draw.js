@@ -16,7 +16,7 @@ function Display_Rumble(team) {
         <h3>Play-by-play</h3>
     `
     for(entry of toprint[1]) {
-        display1.innerHTML += `<p>${entry}</p>`
+        display1.innerHTML += `${entry}<br />`
     }
 }
 
@@ -39,10 +39,17 @@ function teamOverview(name, data, element) {
         `
     }
 }
+
 a = document.getElementById('a')
 b = document.getElementById('b')
 console.log(data)
 teams = Object.keys(data)
+team1 = teams[0]
+team2 = teams[1]
+teamOverview(team1, data, a);
+teamOverview(team2, data, b);
 
-teamOverview(teams[0], data, a);
-teamOverview(teams[1], data, b);
+
+
+
+// https://stackoverflow.com/questions/1265887/call-javascript-function-on-hyperlink-click
