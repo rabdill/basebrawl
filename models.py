@@ -1,3 +1,4 @@
+import math
 import random
 
 class Fighter:
@@ -41,8 +42,11 @@ class Fighter:
         # sprint_speed
         # oaa
 
+
+
         # If a player slugs above average, has a below-average BA, and the
         # percentiles are more than 25 apart, label them a meathead
+        self.accuracy = int(math.ceil(data['whiff_percent'] / 10))
         if data['xslg'] > 50 and data['xba'] < 45 and data['xslg']-data['xba'] > 25:
             self.meathead = True
             print('meathayd')
@@ -88,16 +92,18 @@ class Fighter:
         """
         Separating out the ever-growing logic used to determine damage
         """
+
         # first determine if the hit lands
+        minland = -1 if self.meathead else 1 # meatheads less likely to land
 
-        minland = 0 if self.meathead else 1 # meatheads less likely to land
-
-        land = random.randint(minland, (self.accuracy+5)) >= 3
+        land = random.randint(minland, (self.accuracy+3)) >= 3
         if not land:
             return(0)
+
+        # Then determine how much damage is done:
         dam = random.randint(self.min_hit, self.strength)
         if self.meathead:
-            dam += 5
+            dam += 10
         return(dam)
 
 
