@@ -55,9 +55,7 @@ def load_saloon():
                     entry[headers[i]] = int(line[i])
                 except ValueError:
                     entry[headers[i]] = None
-            newb = models.Fighter(line[0])
-            newb.convert_batter(entry)
-            batters[newb.name] = newb
+            batters[line[0]] = entry
     with open('rosters.csv','r',encoding='utf-8-sig') as infile:
         team_names = []
         data = []
@@ -75,8 +73,11 @@ def load_saloon():
     # next we create each player and add them to the team
     for entry in data:
         player_name, team_name = entry
-        player = batters.get(player_name)
-        teams[team_name].add_fighter(player)
+        newb = models.Fighter(player_name)
+
+        playerdata = batters.get(player_name)
+        newb.convert_batter(playerdata)
+        teams[team_name].add_fighter(newb)
 
     results = simulation.Rumble(teams['Burps'], teams['Farts'], int(sys.argv[1]))
     print(f'\n\nBurps: {results[0]}\nFarts: {results[1]}')

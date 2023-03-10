@@ -7,13 +7,46 @@ class Fighter:
         self.wins = []
         self.losses = []
 
+        # Trait points
+        self.health = None # current health points
+        self.max_health = None # the ceiling for health points
+        self.strength = None # max damage from one hit
+        self.accuracy = None # probability (0–10) that a given hit will land
+        self.speed = None # how many hits can you get into one attack?
+        self.min_hit = None # what's the floor for how much (unmodified) damage a hit can do?
+
+        ### Special tags
+        self.meathead = False # Every hit gets more strength and less accuracy
+
     def convert_batter(self, data):
         """
         INPUT:
             data - Parses a single line of the statcast CSV batter data.
         """
-        print(f'\nWE GOT {self.name}')
+        print(f'WE GOT {self.name}')
         self.debug_entry()
+
+        # xwoba
+        # xba
+        # xslg
+        # xiso
+        # xobp
+        # brl
+        # brl_percent
+        # exit_velocity
+        # hard_hit_percent
+        # k_percent
+        # bb_percent
+        # whiff_percent
+        # sprint_speed
+        # oaa
+
+        # If a player slugs above average, has a below-average BA, and the
+        # percentiles are more than 25 apart, label them a meathead
+        if data['xslg'] > 50 and data['xba'] < 45 and data['xslg']-data['xba'] > 25:
+            self.meathead = True
+            print('meathayd')
+
 
     def convert_pitcher(self, data):
         """
@@ -22,11 +55,13 @@ class Fighter:
         """
         pass
 
-    def debug_entry(self, health=300, strength=50, speed=3):
+    def debug_entry(self, health=300, strength=50, speed=3, accuracy=5, min_hit=10):
         self.health = health
         self.max_health = health
         self.strength = strength
         self.speed = speed
+        self.accuracy = accuracy
+        self.min_hit = min_hit
 
     def reset(self):
         """
@@ -49,6 +84,24 @@ class Fighter:
             self.awake = False
         return(self.awake)
 
+    def _calculate_damage(self, opponent):
+        """
+        Separating out the ever-growing logic used to determine damage
+        """
+        # first determine if the hit lands
+
+        minland = 0 if self.meathead else 1 # meatheads less likely to land
+
+        land = random.randint(minland, (self.accuracy+5)) >= 3
+        if not land:
+            return(0)
+        dam = random.randint(self.min_hit, self.strength)
+        if self.meathead:
+            dam += 5
+        return(dam)
+
+
+
     def attack(self, opponent):
         """
         Calculates the impact of an attack against $opponent.
@@ -70,22 +123,31 @@ class Fighter:
         cumulative_dam = 0
         attacks_done = 0
         for x in range(attacks_todo):
-            dam = random.randint(int(self.strength/4), self.strength)
-            cumulative_dam += dam
-            attacks_done += 1
+            dam = self._calculate_damage(opponent)
             opp_awake = opponent.damage(dam)
+            if dam > 0:
+                cumulative_dam += dam
+                attacks_done += 1
             if not opp_awake:
                 break
         if not opp_awake:
             events.append(f'{self.name} knocks out {opponent.name} after doing {dam} damage in {attacks_done} hit{"s" if attacks_done > 1 else ""}!')
             return(events)
 
-        descriptor = ','
-        if attacks_done == 2:
-            descriptor = ' twice,'
-        if attacks_done > 2:
-            descriptor = f' {attacks_done} times,'
-        events.append(f'{self.name} hits {opponent.name}{descriptor} doing {dam} damage! He has {opponent.health} points remaining.')
+        if attacks_done == 0:
+            descriptor = ''
+            if attacks_todo == 2:
+                descriptor = ' twice'
+            if attacks_todo > 2:
+                descriptor = f' {attacks_todo} times'
+            events.append(f'{self.name} tries to hit {opponent.name}{descriptor} but completely misses.')
+        else:
+            descriptor = ','
+            if attacks_done == 2:
+                descriptor = ' twice,'
+            if attacks_done > 2:
+                descriptor = f' {attacks_done} times,'
+            events.append(f'{self.name} hits {opponent.name}{descriptor} doing {cumulative_dam} damage! He has {opponent.health} points remaining.')
 
         return(events)
 
