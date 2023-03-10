@@ -12,7 +12,8 @@ class Fighter:
         INPUT:
             data - Parses a single line of the statcast CSV batter data.
         """
-        pass
+        print(f'\nWE GOT {self.name}')
+        self.debug_entry()
 
     def convert_pitcher(self, data):
         """

@@ -4,7 +4,7 @@ import fighting
 import models
 import simulation
 
-if __name__ == '__main__':
+def poker_debug():
     rich = models.Fighter('Rich')
     rich.debug_entry(speed=1, strength=50)
 
@@ -40,3 +40,62 @@ if __name__ == '__main__':
     results = simulation.Rumble(burps, farts, int(sys.argv[1]))
     print(f'\n\nBurps: {results[0]}\nFarts: {results[1]}')
     simulation.Generate_report(*results, burps, farts)
+
+def load_saloon():
+    batters = {}
+
+    with open('batter_percentiles.csv', 'r', encoding='utf-8-sig') as infile:
+        headers = infile.readline()[:-1].split(',')
+
+        for line in infile:
+            line = line[:-1].split(',')
+            entry = {}
+            for i in range(1, len(headers)): # skip player_name field
+                try:
+                    entry[headers[i]] = int(line[i])
+                except ValueError:
+                    entry[headers[i]] = None
+            newb = models.Fighter(line[0])
+            newb.convert_batter(entry)
+            batters[newb.name] = newb
+    with open('rosters.csv','r',encoding='utf-8-sig') as infile:
+        team_names = []
+        data = []
+        for line in infile:
+            player, team = line[:-1].split(',')
+            if team not in team_names:
+                team_names.append(team) # keep track of team names
+            data.append((player,team))
+    # once we've loaded all the rosters, we know the names of the teams and
+    # can initialize them
+    teams = {}
+    for team_name in team_names:
+        teams[team_name] = models.Team(team_name)
+    # now we have Team objects for all the teams, and a way to address them.
+    # next we create each player and add them to the team
+    for entry in data:
+        player_name, team_name = entry
+        player = batters.get(player_name)
+        teams[team_name].add_fighter(player)
+
+    results = simulation.Rumble(teams['Burps'], teams['Farts'], int(sys.argv[1]))
+    print(f'\n\nBurps: {results[0]}\nFarts: {results[1]}')
+    simulation.Generate_report(*results, teams['Burps'], teams['Farts'])
+    # figure out how to get fighting stats from batting stats
+
+    # repeat for pitching
+
+    # (eventually, figure out how to save the data at this point so we can jump right back in
+    # here, rather than loading every player and cross-referencing with rosters every time it runs.
+    # but we don't have to do this until the stat conversions are actually set in stone.)
+
+    # pit two teams against each other
+
+    # once that's working ok, go back and add the one-on-one records so we can see if
+    # some players always beat the same guys
+
+    # then keep adding wrinkles to the fight calculations!
+
+if __name__ == '__main__':
+    #poker_debug()
+    load_saloon()
