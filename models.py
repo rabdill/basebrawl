@@ -222,14 +222,22 @@ class RumbleReport:
         """
         self.events.append(text)
 
-    def Record_major(self, text):
+    def Record_major(self, text, team=None):
         """
         Records a string as a new event in the MAJOR event scroll.
 
         Input:
         text: String. The full text of an event.
         """
-        self.major_events.append(text)
+        if team is not None:
+            if team==1:
+                toprint = f'<li>{text}</li>'
+            else:
+                toprint = f'<li class="right">{text}</li>'
+        else:
+            toprint = f'<li class="center">{text}</li>'
+
+        self.major_events.append(toprint)
 
 
     def Scroll(self):
@@ -264,4 +272,4 @@ class RumbleReport:
             victor = f2.name
             vteam = f2.team
             loser = f1.name
-        self.major_events.append(f'{victor} of the {vteam} defeated {loser}.')
+        self.Record_major(f'{victor} of the {vteam} defeated {loser}.', team=winner)
