@@ -79,9 +79,15 @@ def load_saloon():
         newb.convert_batter(playerdata)
         teams[team_name].add_fighter(newb)
 
+    # Do the two-team rumble!
+    to_record = []
+
     results = simulation.Rumble(teams['Burps'], teams['Farts'], int(sys.argv[1]))
     print(f'\n\nBurps: {results[0]}\nFarts: {results[1]}')
-    simulation.Generate_report(*results, teams['Burps'], teams['Farts'])
+    report = simulation.Generate_report(*results, teams['Burps'], teams['Farts'])
+    to_record.append(report)
+    simulation.Record_reports(to_record)
+
     # figure out how to get fighting stats from batting stats
 
     # repeat for pitching

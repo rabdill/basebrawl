@@ -90,9 +90,18 @@ def Generate_report(t1_wins, t2_wins, results, t1, t2):
     for rumble in results:
         to_record[rumble.winner]['logs'].append([rumble.major_events, rumble.events])
 
+    return(to_record)
+
+def Record_reports(reports):
     #########
     # Write to file
     #########
+    to_record = defaultdict(dict)
+    known_teams = []
+    for report in reports:
+        teams = list(report.keys())
+        to_record[teams[0]][teams[1]] = report
+        to_record[teams[1]][teams[0]] = report
     with open("results.js", "w") as outfile:
-        outfile.write('data=')
+        outfile.write('alldata=')
         json.dump(to_record, outfile)

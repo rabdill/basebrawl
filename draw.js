@@ -1,7 +1,9 @@
-function Display_Rumble(team) {
+function Display_Rumble(team1, team2) {
+    data = alldata[team1][team2]
+
     display1 = document.getElementById('display1')
-    idx = Math.floor(Math.random() * data[team]['logs'].length)
-    toprint = data[team]['logs'][idx]
+    idx = Math.floor(Math.random() * data[team1]['logs'].length)
+    toprint = data[team1]['logs'][idx]
     console.log(toprint)
     // Print major events
     display1.innerHTML = `
@@ -20,16 +22,10 @@ function Display_Rumble(team) {
     }
 }
 
-function teamOverview(name, data, element) {
-    teams = Object.keys(data)
-    if(teams[0] == name) {
-        opponent = teams[1]
-    } else {
-        opponent = teams[0]
-    }
+function teamOverview(name, opponent, data, element) {
     element.innerHTML = `
         <h2>${name}: ${data[name]['wins']}&ndash;${data[opponent]['wins']}</h2>
-        <button type="button" class="btn btn-primary" onclick="Display_Rumble('${name}')">Show random win log</button>
+        <button type="button" class="btn btn-primary" onclick="Display_Rumble('${name}','${opponent}')">Show random win log</button>
         <ul>
     `
     for (var fighter of Object.keys(data[name]['fighter_records'])) {
@@ -40,14 +36,30 @@ function teamOverview(name, data, element) {
     }
 }
 
+function writeMatchups(teams) {
+    matchups = document.getElementById('matchups')
+    to_write = "<ul>"
+    for(team1 in teams) {
+        for(team2 in teams) {
+            to_write += `<li><button type="button" class="btn btn-primary" onclick="Display_Matchup('"${team1}", "${team2}"')">${team1} vs ${team2}</button>`
+        }
+    }
+    to_write += "</ul>"
+    matchups.innerHTML=to_write
+}
+
 a = document.getElementById('a')
 b = document.getElementById('b')
-console.log(data)
-teams = Object.keys(data)
+
+console.log(alldata)
+
+teams = Object.keys(alldata)
+writeMatchups(teams)
+
 team1 = teams[0]
 team2 = teams[1]
-teamOverview(team1, data, a);
-teamOverview(team2, data, b);
+teamOverview(team1, team2, alldata[team1][team2], a);
+teamOverview(team2, team1, alldata[team2][team1], b);
 
 
 
