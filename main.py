@@ -82,10 +82,13 @@ def load_saloon():
     # Do the two-team rumble!
     to_record = []
 
-    results = simulation.Rumble(teams['Burps'], teams['Farts'], int(sys.argv[1]))
-    print(f'\n\nBurps: {results[0]}\nFarts: {results[1]}')
-    report = simulation.Generate_report(*results, teams['Burps'], teams['Farts'])
-    to_record.append(report)
+    for team1 in team_names:
+        for team2 in team_names:
+            if team1 != team2:
+                results = simulation.Rumble(teams[team1], teams[team2], int(sys.argv[1]))
+                print(f'\n{team1}: {results[0]}\n{team2}: {results[1]}')
+                report = simulation.Generate_report(*results, teams[team1], teams[team2])
+                to_record.append(report)
     simulation.Record_reports(to_record)
 
     # figure out how to get fighting stats from batting stats

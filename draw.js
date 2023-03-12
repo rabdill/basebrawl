@@ -38,20 +38,21 @@ function teamOverview(name, opponent, data, element) {
 
 function writeMatchups(teams) {
     console.log(teams)
-    matchups = document.getElementById('matchups')
-    to_write = "<ul>"
+    matchups1 = document.getElementById('matchups1')
+    matchups2 = document.getElementById('matchups2')
+    to_write1 = "<ul>"
+    to_write2 = "<ul>"
     for(team1 of teams) {
-        for(team2 of teams) {
-            if(team1 != team2) {
-                to_write += `<li><button type="button" class="btn btn-primary" onclick="Display_Matchup('${team1}', '${team2}')">${team1} vs ${team2}</button>`
-            }
-        }
+        to_write1 += `<li><button type="button" class="btn btn-primary" onclick="SetTeam('${team1}', 1)">${team1}</button>`
+        to_write2 += `<li><button type="button" class="btn btn-primary" onclick="SetTeam('${team1}', 2)">${team1}</button>`
     }
-    to_write += "</ul>"
-    matchups.innerHTML=to_write
+    to_write1 += "</ul>"
+    to_write2 += "</ul>"
+    matchups1.innerHTML=to_write1
+    matchups2.innerHTML=to_write2
 }
 
-function Display_Matchup(team1, team2) {
+function Display_Matchup() {
     a = document.getElementById('a')
     b = document.getElementById('b')
     teamOverview(team1, team2, alldata[team1][team2], a);
@@ -62,6 +63,17 @@ function Display_Matchup(team1, team2) {
     display1.innerHTML = ''
 }
 
+function SetTeam(team, num) {
+    if(num == 1) {
+        team1 = team
+    } else {
+        team2 = team
+    }
+    Display_Matchup()
+}
+
+team1 = 'Burps'
+team2 = 'Farts'
 
 console.log(alldata)
 teams = Object.keys(alldata)
