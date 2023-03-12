@@ -37,29 +37,39 @@ function teamOverview(name, opponent, data, element) {
 }
 
 function writeMatchups(teams) {
+    console.log(teams)
     matchups = document.getElementById('matchups')
     to_write = "<ul>"
-    for(team1 in teams) {
-        for(team2 in teams) {
-            to_write += `<li><button type="button" class="btn btn-primary" onclick="Display_Matchup('"${team1}", "${team2}"')">${team1} vs ${team2}</button>`
+    for(team1 of teams) {
+        for(team2 of teams) {
+            if(team1 != team2) {
+                to_write += `<li><button type="button" class="btn btn-primary" onclick="Display_Matchup('${team1}', '${team2}')">${team1} vs ${team2}</button>`
+            }
         }
     }
     to_write += "</ul>"
     matchups.innerHTML=to_write
 }
 
-a = document.getElementById('a')
-b = document.getElementById('b')
+function Display_Matchup(team1, team2) {
+    a = document.getElementById('a')
+    b = document.getElementById('b')
+    teamOverview(team1, team2, alldata[team1][team2], a);
+    teamOverview(team2, team1, alldata[team2][team1], b);
+
+    // also clear whatever matchup was previously displayed
+    display1 = document.getElementById('display1')
+    display1.innerHTML = ''
+}
+
 
 console.log(alldata)
-
 teams = Object.keys(alldata)
 writeMatchups(teams)
 
 team1 = teams[0]
 team2 = teams[1]
-teamOverview(team1, team2, alldata[team1][team2], a);
-teamOverview(team2, team1, alldata[team2][team1], b);
+
 
 
 
