@@ -78,12 +78,3 @@ team2 = 'Farts'
 console.log(alldata)
 teams = Object.keys(alldata)
 writeMatchups(teams)
-
-team1 = teams[0]
-team2 = teams[1]
-
-
-
-
-
-// https://stackoverflow.com/questions/1265887/call-javascript-function-on-hyperlink-click

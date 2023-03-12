@@ -46,11 +46,14 @@ class Fighter:
 
         # If a player slugs above average, has a below-average BA, and the
         # percentiles are more than 25 apart, label them a meathead
-        self.accuracy = int(math.ceil(data['whiff_percent'] / 10))
-        if data['xslg'] > 50 and data['xba'] < 45 and data['xslg']-data['xba'] > 25:
-            self.meathead = True
-            print('meathayd')
-
+        if data is None or data['whiff_percent'] is None:
+            print('HELPLESS!!')
+            self.accuracy = 0
+        else:
+            self.accuracy = int(math.ceil(data['whiff_percent'] / 10))
+            if data['xslg'] > 50 and data['xba'] < 45 and data['xslg']-data['xba'] > 25:
+                self.meathead = True
+                print('meathayd')
 
     def convert_pitcher(self, data):
         """

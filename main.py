@@ -56,7 +56,7 @@ def load_saloon():
                 except ValueError:
                     entry[headers[i]] = None
             batters[line[0]] = entry
-    with open('rosters.csv','r',encoding='utf-8-sig') as infile:
+    with open('saloon.csv','r',encoding='utf-8-sig') as infile:
         team_names = []
         data = []
         for line in infile:
