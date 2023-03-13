@@ -49,11 +49,19 @@ class Fighter:
         if data is None or data['whiff_percent'] is None:
             print('HELPLESS!!')
             self.accuracy = 0
-        else:
-            self.accuracy = int(math.ceil(data['whiff_percent'] / 10))
-            if data['xslg'] > 50 and data['xba'] < 45 and data['xslg']-data['xba'] > 25:
-                self.meathead = True
-                print('meathayd')
+            return()
+
+        self.accuracy = int(math.ceil(data['whiff_percent'] / 10))
+
+        self.speed = int(math.ceil(data['sprint_speed'] / 10))
+
+        self.strength = int(math.ceil(data['xslg'] / 2))
+
+        self.min_hit = int(math.floor(self.strength * (data['brl_percent'] / 100)))
+
+        if data['xslg'] > 50 and data['xba'] < 45 and data['xslg']-data['xba'] > 25:
+            self.meathead = True
+            print('meathayd')
 
     def convert_pitcher(self, data):
         """
@@ -62,7 +70,7 @@ class Fighter:
         """
         pass
 
-    def debug_entry(self, health=300, strength=50, speed=3, accuracy=5, min_hit=10):
+    def debug_entry(self, health=300, strength=50, speed=3, accuracy=5, min_hit=1):
         self.health = health
         self.max_health = health
         self.strength = strength
