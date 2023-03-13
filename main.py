@@ -84,7 +84,7 @@ def load_saloon():
 
     for team1 in team_names:
         for team2 in team_names:
-            if team1 != team2:
+            if team1 > team2:
                 results = simulation.Rumble(teams[team1], teams[team2], int(sys.argv[1]))
                 print(f'\n{team1}: {results[0]}\n{team2}: {results[1]}')
                 report = simulation.Generate_report(*results, teams[team1], teams[team2])
@@ -107,5 +107,4 @@ def load_saloon():
     # then keep adding wrinkles to the fight calculations!
 
 if __name__ == '__main__':
-    #poker_debug()
     load_saloon()
