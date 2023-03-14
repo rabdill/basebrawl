@@ -148,7 +148,7 @@ class Fighter:
             if not opp_awake:
                 break
         if not opp_awake:
-            events.append(f'{self.name} knocks out {opponent.name} after doing {dam} damage in {attacks_done} hit{"s" if attacks_done > 1 else ""}!')
+            events.append(f'{self.name} knocks out {opponent.name} after doing {cumulative_dam} damage in {attacks_done} hit{"s" if attacks_done > 1 else ""}!')
             return(events)
 
         if attacks_done == 0:
