@@ -4,43 +4,6 @@ import fighting
 import models
 import simulation
 
-def poker_debug():
-    rich = models.Fighter('Rich')
-    rich.debug_entry(speed=1, strength=50)
-
-    nick = models.Fighter('Nick')
-    nick.debug_entry(speed=3, strength=17)
-
-    logan = models.Fighter('Logan')
-    logan.debug_entry(speed=6, strength=5)
-
-    rob = models.Fighter('Rob')
-    rob.debug_entry(speed=4, strength=12)
-
-    john = models.Fighter('John')
-    john.debug_entry(speed=2, strength=24)
-
-    hanratty = models.Fighter('Hanratty')
-    hanratty.debug_entry(speed=1, strength=25, health=500)
-
-    burps = models.Team('Burps')
-    burps.add_fighter(rich)
-    burps.add_fighter(nick)
-    burps.add_fighter(logan)
-
-    farts = models.Team('Farts')
-    farts.add_fighter(rob)
-    farts.add_fighter(john)
-    farts.add_fighter(hanratty)
-
-    # report = fighting.Rumble(burps, farts)
-    # report.Scroll()
-    # print(f'{report.winner} win.')
-
-    results = simulation.Rumble(burps, farts, int(sys.argv[1]))
-    print(f'\n\nBurps: {results[0]}\nFarts: {results[1]}')
-    simulation.Generate_report(*results, burps, farts)
-
 def load_saloon(rosterpath='rosters.csv'):
     batters = {}
 
@@ -85,6 +48,8 @@ def load_saloon(rosterpath='rosters.csv'):
     for team1 in team_names:
         for team2 in team_names:
             if team1 > team2:
+                for player in teams[team1].fighters + teams[team2].fighters:
+                    player.reset_all()
                 results = simulation.Rumble(teams[team1], teams[team2], int(sys.argv[1]))
                 print(f'\n{team1}: {results[0]}\n{team2}: {results[1]}')
                 report = simulation.Generate_report(*results, teams[team1], teams[team2])

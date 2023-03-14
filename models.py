@@ -24,7 +24,6 @@ class Fighter:
         INPUT:
             data - Parses a single line of the statcast CSV batter data.
         """
-        print(f'WE GOT {self.name}')
         self.debug_entry()
 
         # xwoba
@@ -47,7 +46,6 @@ class Fighter:
         # If a player slugs above average, has a below-average BA, and the
         # percentiles are more than 25 apart, label them a meathead
         if data is None or data['whiff_percent'] is None:
-            print('HELPLESS!!')
             self.accuracy = 0
             return()
 
@@ -61,7 +59,6 @@ class Fighter:
 
         if data['xslg'] > 50 and data['xba'] < 45 and data['xslg']-data['xba'] > 25:
             self.meathead = True
-            print('meathayd')
 
     def convert_pitcher(self, data):
         """
@@ -85,6 +82,17 @@ class Fighter:
         """
         self.awake = True
         self.health = self.max_health
+
+    def reset_all(self):
+        """
+        Sets a fighter's stats back to their original values as above, but
+        ALSO resets the fighter's records of wins and losses. Used after simulating
+        lots of rumbles against a single team, before moving on to rumbles with
+        another team.
+        """
+        self.reset()
+        self.wins = []
+        self.losses = []
 
     def damage(self, hit):
         """
