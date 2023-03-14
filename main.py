@@ -41,7 +41,7 @@ def poker_debug():
     print(f'\n\nBurps: {results[0]}\nFarts: {results[1]}')
     simulation.Generate_report(*results, burps, farts)
 
-def load_saloon():
+def load_saloon(rosterpath='rosters.csv'):
     batters = {}
 
     with open('batter_percentiles.csv', 'r', encoding='utf-8-sig') as infile:
@@ -56,7 +56,7 @@ def load_saloon():
                 except ValueError:
                     entry[headers[i]] = None
             batters[line[0]] = entry
-    with open('saloon.csv','r',encoding='utf-8-sig') as infile:
+    with open(rosterpath,'r',encoding='utf-8-sig') as infile:
         team_names = []
         data = []
         for line in infile:
@@ -107,4 +107,5 @@ def load_saloon():
     # then keep adding wrinkles to the fight calculations!
 
 if __name__ == '__main__':
+    #load_saloon('saloon.csv')
     load_saloon()
