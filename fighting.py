@@ -60,15 +60,15 @@ def Rumble(t1, t2):
     Returns:
     - winner: Integer. 1 means t1 won, 2 means t2 won.
     """
-    # Shuffle the team rosters at the beginning of the rumble
-    t1.shuffle()
-    t2.shuffle()
     # Then create an object to save matchup logs
     # for each fighter
     report = models.RumbleReport(t1, t2)
 
     round = 1
     while min(t1.numawake(), t2.numawake()) > 0:
+        # Shuffle the team rosters at the beginning of each round
+        t1.shuffle()
+        t2.shuffle()
         report.Record_major(f'(Round {round})')
         report.Record(f'<h4>Round {round}</h4>')
         report.Record(f'<span class="team1"><strong>{t1.name}:</strong> {t1.numawake()} awake</span>')
