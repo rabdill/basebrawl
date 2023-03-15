@@ -30,7 +30,9 @@ function teamOverview(name, opponent, data, element) {
     `
     for (var fighter of Object.keys(data[name]['fighter_records'])) {
         element.innerHTML += `
-            <li>${fighter}: ${data[name]['fighter_records'][fighter]['wins']}&ndash;${data[name]['fighter_records'][fighter]['losses']}
+            <li>
+            <button type="button" class="btn btn-primary" onclick="Display_Player('${fighter}')">${fighter}</button>
+            ${data[name]['fighter_records'][fighter]['wins']}&ndash;${data[name]['fighter_records'][fighter]['losses']}
             </li>
         `
     }
@@ -61,6 +63,18 @@ function Display_Matchup() {
     // also clear whatever matchup was previously displayed
     display1 = document.getElementById('display1')
     display1.innerHTML = ''
+}
+
+function Display_Player(player) {
+    display1 = document.getElementById('display1')
+    display1.innerHTML = '<ul>'
+    console.log(player)
+    console.log(players[player])
+    for (var trait of Object.keys(players[player]['fighter_stats'])) {
+        display1.innerHTML += `
+            <li>${trait}: ${players[player]['fighter_stats'][trait]}</li>
+        `
+    }
 }
 
 function SetTeam(team, num) {

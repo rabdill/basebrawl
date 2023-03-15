@@ -95,7 +95,12 @@ def Generate_report(t1_wins, t2_wins, results, t1, t2):
 
     return(to_record)
 
-def Record_reports(reports):
+def Record_reports(reports, players):
+    """
+    Input:
+        reports - List of RumbleReport objects
+        players - List of Fighter objects
+    """
     #########
     # Write to file
     #########
@@ -108,3 +113,9 @@ def Record_reports(reports):
     with open("results.js", "w") as outfile:
         outfile.write('alldata=')
         json.dump(to_record, outfile)
+
+        player_record = {}
+        for x in players:
+            player_record[x.name] = x.print()
+        outfile.write('\nplayers=')
+        json.dump(player_record, outfile)

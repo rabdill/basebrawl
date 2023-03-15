@@ -32,6 +32,7 @@ def load_saloon(rosterpath='rosters.csv'):
     teams = {}
     for team_name in team_names:
         teams[team_name] = models.Team(team_name)
+    fighters = [] # we save an extra copy of each fighter to display the stats
     # now we have Team objects for all the teams, and a way to address them.
     # next we create each player and add them to the team
     for entry in data:
@@ -41,6 +42,7 @@ def load_saloon(rosterpath='rosters.csv'):
         playerdata = batters.get(player_name)
         newb.convert_batter(playerdata)
         teams[team_name].add_fighter(newb)
+        fighters.append(newb)
 
     # Do the two-team rumble!
     to_record = []
@@ -54,7 +56,7 @@ def load_saloon(rosterpath='rosters.csv'):
                 print(f'\n{team1}: {results[0]}\n{team2}: {results[1]}')
                 report = simulation.Generate_report(*results, teams[team1], teams[team2])
                 to_record.append(report)
-    simulation.Record_reports(to_record)
+    simulation.Record_reports(to_record, fighters)
 
     # figure out how to get fighting stats from batting stats
 

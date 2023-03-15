@@ -19,6 +19,29 @@ class Fighter:
         ### Special tags
         self.meathead = False # Every hit gets more strength and less accuracy
 
+    def print(self):
+        """
+        Converts a fighter's stats (and player stats) into a dictionary that can
+        be recorded for display on the front-end.
+        """
+        x = {
+            'name': self.name,
+            #'player_stats': {},
+            'fighter_stats': {
+                'max_health': self.max_health,
+                'strength': self.strength,
+                'accuracy': self.accuracy,
+                'speed': self.speed,
+                'min_hit': self.min_hit
+            },
+            'tags': []
+        }
+
+        if self.meathead:
+            x['tags'].append('meathead')
+
+        return(x)
+
     def convert_batter(self, data):
         """
         INPUT:
@@ -50,11 +73,8 @@ class Fighter:
             return()
 
         self.accuracy = int(math.ceil(data['whiff_percent'] / 10))
-
         self.speed = int(math.ceil(data['sprint_speed'] / 10))
-
         self.strength = int(math.ceil(data['xslg'] / 2))
-
         self.min_hit = int(math.floor(self.strength * (data['brl_percent'] / 100)))
 
         if data['xslg'] > 50 and data['xba'] < 45 and data['xslg']-data['xba'] > 25:
@@ -124,8 +144,6 @@ class Fighter:
         if self.meathead:
             dam += 10
         return(dam)
-
-
 
     def attack(self, opponent):
         """
