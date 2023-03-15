@@ -29,7 +29,7 @@ def Fight(p1, p2):
         else:
             attacker = p2
             defender = p1
-    events.append(f'<br><br>{attacker.name} gets the jump on {defender.name} and attacks first:')
+    events.append(f'<br><br>{attacker.name} attacks {defender.name}:')
 
     while True:
         events += attacker.attack(defender)

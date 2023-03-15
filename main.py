@@ -72,5 +72,5 @@ def load_saloon(rosterpath='rosters.csv'):
     # then keep adding wrinkles to the fight calculations!
 
 if __name__ == '__main__':
-    #load_saloon('saloon.csv')
-    load_saloon()
+    load_saloon('saloon.csv')
+    #load_saloon()
