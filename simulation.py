@@ -81,7 +81,10 @@ def Generate_report(t1_wins, t2_wins, results, t1, t2):
     #########
     # First, we load in the one-on-one fighter records
     #########
-    for fighter in t1.fighters + t2.fighters:
+    # sort fighters by wins
+    tosave = t1.fighters + t2.fighters
+    tosave.sort(reverse=True, key=lambda x: len(x.wins))
+    for fighter in tosave:
         to_record = _record_fighter(fighter, to_record)
 
     #########
