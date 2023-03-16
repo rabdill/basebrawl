@@ -6,6 +6,7 @@ import simulation
 
 def load_saloon(rosterpath='rosters.csv'):
     batters = {}
+    pitchers = {}
 
     with open('batter_percentiles.csv', 'r', encoding='utf-8-sig') as infile:
         headers = infile.readline()[:-1].split(',')
@@ -19,6 +20,18 @@ def load_saloon(rosterpath='rosters.csv'):
                 except ValueError:
                     entry[headers[i]] = None
             batters[line[0]] = entry
+    with open('pitcher_percentiles.csv', 'r', encoding='utf-8-sig') as infile:
+        headers = infile.readline()[:-1].split(',')
+
+        for line in infile:
+            line = line[:-1].split(',')
+            entry = {}
+            for i in range(1, len(headers)): # skip player_name field
+                try:
+                    entry[headers[i]] = int(line[i])
+                except ValueError:
+                    entry[headers[i]] = None
+            pitchers[line[0]] = entry
     with open(rosterpath,'r',encoding='utf-8-sig') as infile:
         team_names = []
         data = []
@@ -39,8 +52,13 @@ def load_saloon(rosterpath='rosters.csv'):
         player_name, team_name = entry
         newb = models.Fighter(player_name)
 
-        playerdata = batters.get(player_name)
-        newb.convert_batter(playerdata)
+        playerdata = pitchers.get(player_name)
+        if playerdata is not None:
+            newb.convert_pitcher(playerdata)
+        else:
+            playerdata = batters.get(player_name)
+            newb.convert_batter(playerdata)
+
         teams[team_name].add_fighter(newb)
         fighters.append(newb)
 

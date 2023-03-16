@@ -113,7 +113,7 @@ def Record_reports(reports, players):
     with open("results.js", "w") as outfile:
         outfile.write('alldata=')
         json.dump(to_record, outfile)
-
+    with open("players.js", "w") as outfile:
         player_record = {}
         for x in players:
             player_record[x.name] = x.print()

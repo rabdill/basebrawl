@@ -86,8 +86,8 @@ function SetTeam(team, num) {
     Display_Matchup()
 }
 
-team1 = 'Burps'
-team2 = 'Farts'
+team1 = 'South Jersey Schlemiels'
+team2 = 'Daily Todays'
 
 console.log(alldata)
 teams = Object.keys(alldata)

@@ -78,16 +78,60 @@ class Fighter:
 
         # If a player slugs above average, has a below-average BA, and the
         # percentiles are more than 25 apart, label them a meathead
-        if data['xslg'] > 50 and data['xba'] < 45 and data['xslg']-data['xba'] > 25:
+        if data['xslg'] > 55 and data['xba'] < 45 and data['xslg']-data['xba'] > 25:
             self.meathead = True
-            self.max_health = self.max_health * 1.2
+            self.max_health = int(math.ceil(self.max_health * 1.5))
+            if self.speed > 8:
+                self.speed = 5
+            elif self.speed > 5:
+                self.speed = 3
+            else:
+                self.speed = 1
 
     def convert_pitcher(self, data):
         """
         INPUT:
             data - Parses a single line of the statcast CSV pitching data.
         """
-        pass
+        self.debug_entry()
+        self.name = 'PITCHER ' + self.name
+        # xwoba
+        # xba
+        # xslg
+        # xiso
+        # xobp
+        # brl
+        # brl_percent
+        # exit_velocity
+        # hard_hit_percent
+        # k_percent
+        # bb_percent
+        # whiff_percent
+        # xera
+        # fb_velocity
+        # fb_spin
+        # curve_spin
+        if data is None or data['whiff_percent'] is None:
+            self.punch_whiff = 55
+            return()
+        self.punch_whiff = 50 / math.sqrt(int(data['bb_percent']))
+        self.speed = int(math.ceil(data['whiff_percent'] / 10))
+        self.strength = int(math.ceil(data['fb_velocity'] / 2))
+        self.min_hit = int(math.floor(self.strength * (data['brl_percent'] / 100)))
+        self.dodge = int(data['hard_hit_percent'])
+
+        # If a player slugs above average, has a below-average BA, and the
+        # percentiles are more than 25 apart, label them a meathead
+        if data['fb_velocity'] > 55 and data['bb_percent'] < 45 and data['fb_velocity']-data['bb_percent'] > 25:
+            self.meathead = True
+            self.max_health = int(math.ceil(self.max_health * 1.5))
+            if self.speed > 8:
+                self.speed = 5
+            elif self.speed > 5:
+                self.speed = 3
+            else:
+                self.speed = 1
+            self.name += ' PITCHMEAT'
 
     def debug_entry(self, health=300, strength=50, speed=3, punch_whiff=10, min_hit=1, dodge=31):
         self.health = health
