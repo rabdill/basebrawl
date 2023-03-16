@@ -159,7 +159,7 @@ class Fighter:
         Calculates the impact of an attack against $opponent.
 
         Returns:
-            - events: A list of strings indicating the results of each attack.
+            - event: A string indicating the results of each attack.
         """
 
         if not opponent.awake:

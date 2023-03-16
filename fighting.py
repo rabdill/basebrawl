@@ -32,7 +32,7 @@ def Fight(p1, p2):
     events.append(f'<br><br>{attacker.name} attacks {defender.name}:')
 
     while True:
-        events += attacker.attack(defender)
+        events.append(attacker.attack(defender))
         if not p1.awake or not p2.awake:
             break
         # if we go for another round, swap attacker and defender
