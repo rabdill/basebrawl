@@ -12,9 +12,10 @@ class Fighter:
         self.health = None # current health points
         self.max_health = None # the ceiling for health points
         self.strength = None # max damage from one hit
-        self.accuracy = None # probability (0–10) that a given hit will land
+        self.punch_whiff = None # probability (0–100) that a given hit will miss
         self.speed = None # how many hits can you get into one attack?
         self.min_hit = None # what's the floor for how much (unmodified) damage a hit can do?
+        self.dodge = None
 
         ### Special tags
         self.meathead = False # Every hit gets more strength and less accuracy
@@ -30,9 +31,10 @@ class Fighter:
             'fighter_stats': {
                 'max_health': self.max_health,
                 'strength': self.strength,
-                'accuracy': self.accuracy,
+                'punch_whiff': self.punch_whiff,
                 'speed': self.speed,
-                'min_hit': self.min_hit
+                'min_hit': self.min_hit,
+                'dodge': self.dodge
             },
             'tags': []
         }
@@ -69,13 +71,14 @@ class Fighter:
         # If a player slugs above average, has a below-average BA, and the
         # percentiles are more than 25 apart, label them a meathead
         if data is None or data['whiff_percent'] is None:
-            self.accuracy = 0
+            self.punch_whiff = 55
             return()
 
-        self.accuracy = int(math.ceil(data['whiff_percent'] / 10))
+        self.punch_whiff = 50 / math.sqrt(int(data['whiff_percent']))
         self.speed = int(math.ceil(data['sprint_speed'] / 10))
         self.strength = int(math.ceil(data['xslg'] / 2))
         self.min_hit = int(math.floor(self.strength * (data['brl_percent'] / 100)))
+        self.dodge = int(data['bb_percent'])
 
         if data['xslg'] > 50 and data['xba'] < 45 and data['xslg']-data['xba'] > 25:
             self.meathead = True
@@ -87,13 +90,14 @@ class Fighter:
         """
         pass
 
-    def debug_entry(self, health=300, strength=50, speed=3, accuracy=5, min_hit=1):
+    def debug_entry(self, health=300, strength=50, speed=3, punch_whiff=10, min_hit=1, dodge=31):
         self.health = health
         self.max_health = health
         self.strength = strength
         self.speed = speed
-        self.accuracy = accuracy
+        self.punch_whiff = punch_whiff
         self.min_hit = min_hit
+        self.dodge = dodge
 
     def reset(self):
         """
@@ -133,11 +137,16 @@ class Fighter:
         """
 
         # first determine if the hit lands
-        minland = -1 if self.meathead else 1 # meatheads less likely to land
+        minmiss = -10 if self.meathead else 1 # meatheads less likely to land
+        miss = random.randint(minmiss, 100) < self.punch_whiff
 
-        land = random.randint(minland, (self.accuracy+3)) >= 3
-        if not land:
+        if miss:
             return(0)
+
+        # then check if the opponent dodges it:
+        dodge = random.randint(0, opponent.dodge) >= 60
+        if dodge:
+            return(-1)
 
         # Then determine how much damage is done:
         dam = random.randint(self.min_hit, self.strength)
@@ -158,15 +167,19 @@ class Fighter:
         if not self.awake:
             return([f'{self.name} passes out before he can attack.'])
 
-        events = []
         # One "attack" could be multiple hits. The max number of hits is decided
         # by the fighter's speed trait.
         attacks_todo = random.randint(1, self.speed)
 
         cumulative_dam = 0
         attacks_done = 0
+        dodged = False
+        opp_awake = opponent.awake
         for x in range(attacks_todo):
             dam = self._calculate_damage(opponent)
+            if dam == -1:
+                dodged = True
+                break
             opp_awake = opponent.damage(dam)
             if dam > 0:
                 cumulative_dam += dam
@@ -174,25 +187,28 @@ class Fighter:
             if not opp_awake:
                 break
         if not opp_awake:
-            events.append(f'{self.name} knocks out {opponent.name} after doing {cumulative_dam} damage in {attacks_done} hit{"s" if attacks_done > 1 else ""}!')
-            return(events)
+            return(f'{self.name} knocks out {opponent.name} after doing {cumulative_dam} damage in {attacks_done} hit{"s" if attacks_done > 1 else ""}!')
 
         if attacks_done == 0:
             descriptor = ''
+            dodgemessage = '.'
             if attacks_todo == 2:
                 descriptor = ' twice'
             if attacks_todo > 2:
                 descriptor = f' {attacks_todo} times'
-            events.append(f'{self.name} tries to hit {opponent.name}{descriptor} but completely misses.')
-        else:
-            descriptor = ','
-            if attacks_done == 2:
-                descriptor = ' twice,'
-            if attacks_done > 2:
-                descriptor = f' {attacks_done} times,'
-            events.append(f'{self.name} hits {opponent.name}{descriptor} doing {cumulative_dam} damage! He has {opponent.health} points remaining.')
+            if dodged:
+                dodgemessage = f' after {opponent.name} dodges!'
+            return(f'{self.name} tries to hit {opponent.name}{descriptor} but completely misses{dodgemessage}')
 
-        return(events)
+        descriptor = ','
+        dodgemessage = '!'
+        if attacks_done == 2:
+            descriptor = ' twice,'
+        if attacks_done > 2:
+            descriptor = f' {attacks_done} times,'
+        if dodged:
+            dodgemessage = f', but {opponent.name} dodges away from further attacks.'
+        return(f'{self.name} hits {opponent.name}{descriptor} doing {cumulative_dam} damage{dodgemessage} He has {opponent.health} points remaining.')
 
     def defeats(self, opponent):
         """
