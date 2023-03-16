@@ -66,10 +66,6 @@ class Fighter:
         # sprint_speed
         # oaa
 
-
-
-        # If a player slugs above average, has a below-average BA, and the
-        # percentiles are more than 25 apart, label them a meathead
         if data is None or data['whiff_percent'] is None:
             self.punch_whiff = 55
             return()
@@ -80,8 +76,11 @@ class Fighter:
         self.min_hit = int(math.floor(self.strength * (data['brl_percent'] / 100)))
         self.dodge = int(data['bb_percent'])
 
+        # If a player slugs above average, has a below-average BA, and the
+        # percentiles are more than 25 apart, label them a meathead
         if data['xslg'] > 50 and data['xba'] < 45 and data['xslg']-data['xba'] > 25:
             self.meathead = True
+            self.max_health = self.max_health * 1.2
 
     def convert_pitcher(self, data):
         """
