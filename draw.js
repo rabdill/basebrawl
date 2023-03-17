@@ -4,7 +4,6 @@ function Display_Rumble(team1, team2) {
     display1 = document.getElementById('display1')
     idx = Math.floor(Math.random() * data[team1]['logs'].length)
     toprint = data[team1]['logs'][idx]
-    console.log(toprint)
     // Print major events
     display1.innerHTML = `
         <h3>Overview</h3>
@@ -39,7 +38,6 @@ function teamOverview(name, opponent, data, element) {
 }
 
 function writeMatchups(teams) {
-    console.log(teams)
     matchups1 = document.getElementById('matchups1')
     matchups2 = document.getElementById('matchups2')
     to_write1 = "<ul>"
@@ -68,8 +66,6 @@ function Display_Matchup() {
 function Display_Player(player) {
     display1 = document.getElementById('display1')
     display1.innerHTML = '<ul>'
-    console.log(player)
-    console.log(players[player])
     for (var trait of Object.keys(players[player]['fighter_stats'])) {
         display1.innerHTML += `
             <li>${trait}: ${players[player]['fighter_stats'][trait]}</li>
@@ -89,6 +85,5 @@ function SetTeam(team, num) {
 team1 = 'South Jersey Schlemiels'
 team2 = 'Daily Todays'
 
-console.log(alldata)
 teams = Object.keys(alldata)
 writeMatchups(teams)
