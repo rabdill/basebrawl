@@ -67,11 +67,13 @@ class Fighter:
         # oaa
 
         if data is None or data['whiff_percent'] is None:
-            self.punch_whiff = 55
+            self.punch_whiff = 48
             return()
 
         self.punch_whiff = 50 / math.sqrt(int(data['whiff_percent']))
-        self.speed = int(math.ceil(data['sprint_speed'] / 10))
+        self.speed = int(math.ceil(data['sprint_speed'] / 20))
+        if self.speed < 1:
+            self.speed = 1
         self.strength = int(math.ceil(data['xslg'] / 2))
         self.min_hit = int(math.floor(self.strength * (data['brl_percent'] / 100)))
         self.dodge = int(data['bb_percent'])
@@ -87,6 +89,7 @@ class Fighter:
                 self.speed = 3
             else:
                 self.speed = 1
+            self.name += ' MEAT'
 
     def convert_pitcher(self, data):
         """
@@ -115,7 +118,9 @@ class Fighter:
             self.punch_whiff = 55
             return()
         self.punch_whiff = 50 / math.sqrt(int(data['bb_percent']))
-        self.speed = int(math.ceil(data['whiff_percent'] / 10))
+        self.speed = int(math.ceil(data['whiff_percent'] / 20))
+        if self.speed < 1:
+            self.speed = 1
         self.strength = int(math.ceil(data['fb_velocity'] / 2))
         self.min_hit = int(math.floor(self.strength * (data['brl_percent'] / 100)))
         self.dodge = int(data['hard_hit_percent'])
@@ -125,12 +130,7 @@ class Fighter:
         if data['fb_velocity'] > 55 and data['bb_percent'] < 45 and data['fb_velocity']-data['bb_percent'] > 25:
             self.meathead = True
             self.max_health = int(math.ceil(self.max_health * 1.5))
-            if self.speed > 8:
-                self.speed = 5
-            elif self.speed > 5:
-                self.speed = 3
-            else:
-                self.speed = 1
+            self.speed = 2
             self.name += ' PITCHMEAT'
 
     def debug_entry(self, health=300, strength=50, speed=3, punch_whiff=10, min_hit=1, dodge=31):
@@ -212,7 +212,11 @@ class Fighter:
 
         # One "attack" could be multiple hits. The max number of hits is decided
         # by the fighter's speed trait.
-        attacks_todo = random.randint(1, self.speed)
+        attacks_todo = 1
+        dice = random.randint(0,10)
+        if dice < self.speed:
+            attacks_todo = random.randint(0, self.speed)
+
 
         cumulative_dam = 0
         attacks_done = 0
