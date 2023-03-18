@@ -97,7 +97,7 @@ def Generate_report(t1_wins, t2_wins, results, t1, t2):
     # data files get too big
     for team in [t1.name, t2.name]:
         if len(to_record[team]['logs']) > 20:
-            to_record[team]['logs'] = random.sample(to_record[team]['logs'], 20)
+            to_record[team]['logs'] = random.sample(to_record[team]['logs'], 10)
     return(to_record)
 
 def Record_reports(reports, players):
