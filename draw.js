@@ -35,7 +35,7 @@ function teamOverview(name, opponent, data, element) {
     for (var fighter of Object.keys(data[name]['fighter_records'])) {
         element.innerHTML += `
             <li>
-            <button type="button" class="btn btn-primary" onclick="Display_Player('${fighter}')">${fighter}</button>
+            ${fighter} <button type="button" class="btn btn-primary" onclick="Display_Player('${fighter}')">?</button>
             ${data[name]['fighter_records'][fighter]['wins']}&ndash;${data[name]['fighter_records'][fighter]['losses']}
             </li>
         `
