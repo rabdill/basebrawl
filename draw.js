@@ -22,6 +22,11 @@ function Display_Rumble(team1, team2) {
 }
 
 function teamOverview(name, opponent, data, element) {
+    if(name == opponent) {
+        // if the user selects a team to fight itself, just clear the window
+        element.innerHTML = ''
+        return
+    }
     element.innerHTML = `
         <h2>${name}: ${data[name]['wins']}&ndash;${data[opponent]['wins']}</h2>
         <button type="button" class="btn btn-primary" onclick="Display_Rumble('${name}','${opponent}')">Show random win log</button>
@@ -40,16 +45,23 @@ function teamOverview(name, opponent, data, element) {
 function writeMatchups(teams) {
     matchups1 = document.getElementById('matchups1')
     matchups2 = document.getElementById('matchups2')
-    to_write1 = "<ul>"
-    to_write2 = "<ul>"
-    for(team1 of teams) {
-        to_write1 += `<li><button type="button" class="btn btn-primary" onclick="SetTeam('${team1}', 1)">${team1}</button>`
-        to_write2 += `<li><button type="button" class="btn btn-primary" onclick="SetTeam('${team1}', 2)">${team1}</button>`
+    to_write1 = '<select id="team1" onchange="SetTeam(this, 1)">'
+    to_write2 = '<select id="team2" onchange="SetTeam(this, 2)">'
+    for(curteam of teams) {
+        to_write1 += `<option value="${curteam}"`
+        to_write2 += `<option value="${curteam}"`
+        if(curteam == team1) {
+            to_write1 += ` selected="selected"`
+        } else if(curteam == team2) {
+            to_write2 += ` selected="selected"`
+        }
+        to_write1 += `>${curteam}</option>`
+        to_write2 += `>${curteam}</option>`
     }
-    to_write1 += "</ul>"
-    to_write2 += "</ul>"
-    matchups1.innerHTML=to_write1
-    matchups2.innerHTML=to_write2
+    to_write1 += "</select>"
+    to_write2 += "</select>"
+    matchups1.innerHTML= to_write1
+    matchups2.innerHTML= to_write2
 }
 
 function Display_Matchup() {
@@ -73,7 +85,13 @@ function Display_Player(player) {
     }
 }
 
-function SetTeam(team, num) {
+function SetTeam(selectbox, num) {
+    if(typeof(selectbox) == 'string') {
+        team = selectbox
+    } else {
+        team = selectbox.value // if it's from a dropdown
+    }
+
     if(num == 1) {
         team1 = team
     } else {
@@ -87,3 +105,4 @@ team2 = 'Daily Todays'
 
 teams = Object.keys(alldata)
 writeMatchups(teams)
+SetTeam(team1, 1) // just print whatever the first matchup is
