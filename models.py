@@ -7,6 +7,8 @@ class Fighter:
         self.awake = True
         self.wins = []
         self.losses = []
+        self.all_wins = 0
+        self.all_losses = 0
 
         # Trait points
         self.health = None # current health points
@@ -43,6 +45,16 @@ class Fighter:
             x['tags'].append('meathead')
 
         return(x)
+
+    def print_csv(self):
+        """
+        Converts a fighter's stats into a string that can be written to a file
+        """
+        joined = ','.join([
+            self.name,self.team,
+            str(self.all_wins), str(self.all_losses)
+        ])
+        return(f'{joined}\n')
 
     def convert_batter(self, data):
         """
@@ -267,7 +279,9 @@ class Fighter:
             - opponent: A Fighter object
         """
         self.wins.append(opponent.name)
+        self.all_wins += 1
         opponent.losses.append(self.name)
+        opponent.all_losses += 1
 
 class Team:
     def __init__(self, name):

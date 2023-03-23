@@ -125,3 +125,6 @@ def Record_reports(reports, players):
             player_record[x.name] = x.print()
         outfile.write('\nplayers=')
         json.dump(player_record, outfile)
+    with open("player_stats.csv","w") as outfile:
+        for x in players:
+            outfile.write(x.print_csv())
