@@ -270,12 +270,18 @@ class Fighter:
 class Team:
     def __init__(self, name):
         self.name = name
-        self.fighters = []
+        self.roster = [] # ALL the fighters
+        self.fighters = [] # The fighters in a single rumble
 
     def add_fighter(self, x):
         x.team = self.name
-        self.fighters.append(x)
-        random.shuffle(self.fighters)
+        self.roster.append(x)
+
+    def fight_roster(self, n=15):
+        """
+        Picks a random team of n fighters for a given rumble
+        """
+        self.fighters = random.sample(self.roster, n)
 
     def shuffle(self):
         """
@@ -308,9 +314,9 @@ class RumbleReport:
         self.winner = None
 
         self.matchups = {}
-        for player in t1.fighters + t2.fighters:
+        for player in t1.roster + t2.roster:
             self.matchups[player.name] = {}
-            for p2 in t1.fighters + t2.fighters:
+            for p2 in t1.roster + t2.roster:
                 self.matchups[player.name][p2.name] = []
 
     def Record(self, text):

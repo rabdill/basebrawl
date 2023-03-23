@@ -63,6 +63,8 @@ def Rumble(t1, t2):
     # Then create an object to save matchup logs
     # for each fighter
     report = models.RumbleReport(t1, t2)
+    t1.fight_roster()
+    t2.fight_roster()
 
     round = 1
     while min(t1.numawake(), t2.numawake()) > 0:

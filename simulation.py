@@ -18,7 +18,7 @@ def Rumble(t1, t2, iterations):
     records = []
     winners = []
     for x in range(iterations):
-        for player in t1.fighters + t2.fighters:
+        for player in t1.roster + t2.roster:
             player.reset()
 
         z = fighting.Rumble(t1, t2)
@@ -84,7 +84,7 @@ def Generate_report(t1_wins, t2_wins, results, t1, t2):
     # First, we load in the one-on-one fighter records
     #########
     # sort fighters by wins
-    tosave = t1.fighters + t2.fighters
+    tosave = t1.roster + t2.roster
     tosave.sort(reverse=True, key=lambda x: len(x.wins))
     for fighter in tosave:
         to_record = _record_fighter(fighter, to_record)

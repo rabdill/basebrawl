@@ -68,7 +68,7 @@ def load_saloon(rosterpath='rosters.csv'):
     for team1 in team_names:
         for team2 in team_names:
             if team1 > team2:
-                for player in teams[team1].fighters + teams[team2].fighters:
+                for player in teams[team1].roster + teams[team2].roster:
                     player.reset_all()
                 results = simulation.Rumble(teams[team1], teams[team2], int(sys.argv[1]))
                 print(f'\n{team1}: {results[0]}\n{team2}: {results[1]}')
