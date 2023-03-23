@@ -68,6 +68,7 @@ class Fighter:
 
         if data is None or data['whiff_percent'] is None:
             self.punch_whiff = 48
+            print(self.name)
             return()
 
         self.punch_whiff = 50 / math.sqrt(int(data['whiff_percent']))
@@ -116,6 +117,7 @@ class Fighter:
         # curve_spin
         if data is None or data['whiff_percent'] is None:
             self.punch_whiff = 55
+            print(self.name)
             return()
         self.punch_whiff = 50 / math.sqrt(int(data['bb_percent']))
         self.speed = int(math.ceil(data['whiff_percent'] / 20))
