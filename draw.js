@@ -35,14 +35,14 @@ function teamOverview(name, opponent, data, element) {
     for (var fighter of Object.keys(data[name]['fighter_records'])) {
         element.innerHTML += `
             <li>
-            ${fighter} <button type="button" class="btn btn-primary" onclick="Display_Player('${fighter}')">?</button>
+            ${data[name]['fighter_records'][fighter]['fancyname']} <i class="bi-zoom-in" style="font-size: 1em;" onclick="Display_Player('${fighter}')"></i>
             ${data[name]['fighter_records'][fighter]['wins']}&ndash;${data[name]['fighter_records'][fighter]['losses']}
             </li>
         `
     }
 }
 
-function writeMatchups(teams) {
+function Write_Team_Dropdowns(teams) {
     matchups1 = document.getElementById('matchups1')
     matchups2 = document.getElementById('matchups2')
     to_write1 = '<select id="team1" onchange="SetTeam(this, 1)">'
@@ -104,5 +104,5 @@ team1 = 'South Jersey Schlemiels'
 team2 = 'Daily Todays'
 
 teams = Object.keys(alldata)
-writeMatchups(teams)
+Write_Team_Dropdowns(teams)
 SetTeam(team1, 1) // just print whatever the first matchup is

@@ -50,7 +50,7 @@ class Fighter:
             data - Parses a single line of the statcast CSV batter data.
         """
         self.debug_entry()
-
+        self.fancyname = '🪖 ' + self.name
         # xwoba
         # xba
         # xslg
@@ -97,7 +97,7 @@ class Fighter:
             data - Parses a single line of the statcast CSV pitching data.
         """
         self.debug_entry()
-        self.name = 'PITCHER ' + self.name
+        self.fancyname = '⚾ ' + self.name
         # xwoba
         # xba
         # xslg

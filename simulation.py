@@ -43,7 +43,8 @@ def _record_fighter(fighter, to_record):
     to_record[fighter.team]['fighter_records'][fighter.name] = {
         'wins': 0,
         'losses': 0,
-        'matchups': defaultdict(lambda: [0,0]) # [wins, losses]
+        'matchups': defaultdict(lambda: [0,0]), # [wins, losses]
+        'fancyname': fighter.fancyname
     }
     for opponent in fighter.wins:
         to_record[fighter.team]['fighter_records'][fighter.name]['matchups'][opponent][0] += 1
