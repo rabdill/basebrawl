@@ -135,7 +135,11 @@ class Fighter:
         self.speed = int(math.ceil(data['whiff_percent'] / 20))
         if self.speed < 1:
             self.speed = 1
-        self.strength = int(math.ceil(data['fb_velocity'] / 2))
+
+        denom = 2
+        if int(data['xiso']) < 50:
+            denom = 2.5 # nerf the pitchers that give up extra bases
+        self.strength = int(math.ceil(data['fb_velocity'] / denom))
         self.min_hit = int(math.floor(self.strength * (data['brl_percent'] / 100)))
         self.dodge = int(data['hard_hit_percent'])
 
