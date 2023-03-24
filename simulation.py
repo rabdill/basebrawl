@@ -99,13 +99,26 @@ def Generate_report(t1_wins, t2_wins, results, t1, t2):
     for team in [t1.name, t2.name]:
         if len(to_record[team]['logs']) > 20:
             to_record[team]['logs'] = random.sample(to_record[team]['logs'], 10)
+
+    # Finally, record the outcome in each team object
+    if t1_wins > t2_wins:
+        t1.wins.append(t2.name)
+        t2.losses.append(t1.name)
+    elif t2_wins > t1_wins:
+        t2.wins.append(t1.name)
+        t1.losses.append(t2.name)
+    else:
+        t1.ties.append(t2.name)
+        t2.ties.append(t1.name)
+
     return(to_record)
 
-def Record_reports(reports, players):
+def Record_reports(reports, all_players, all_teams):
     """
     Input:
         reports - List of RumbleReport objects
-        players - List of Fighter objects
+        all_players - List of Fighter objects
+        all_teams - List of Team objects
     """
     #########
     # Write to file
@@ -121,10 +134,13 @@ def Record_reports(reports, players):
         json.dump(to_record, outfile)
     with open("players.js", "w") as outfile:
         player_record = {}
-        for x in players:
+        for x in all_players:
             player_record[x.name] = x.print()
         outfile.write('\nplayers=')
         json.dump(player_record, outfile)
     with open("player_stats.csv","w") as outfile:
-        for x in players:
+        for x in all_players:
+            outfile.write(x.print_csv())
+    with open("team_stats.csv","w") as outfile:
+        for x in all_teams.values():
             outfile.write(x.print_csv())

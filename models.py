@@ -368,6 +368,9 @@ class Team:
         self.name = name
         self.roster = [] # ALL the fighters
         self.fighters = [] # The fighters in a single rumble
+        self.wins = [] # teams defeated in a SET of simulated rumbles.
+        self.losses = []
+        self.ties = []
 
     def add_fighter(self, x):
         x.team = self.name
@@ -397,6 +400,13 @@ class Team:
         Quick helper function to count the number of awake fighters
         """
         return(len(self.awake()))
+
+    def print_csv(self):
+        """
+        Converts a fighter's stats into a string that can be written to a file
+        """
+        joined = ','.join([self.name]+self.wins)
+        return(f'{joined}\n')
 
 class RumbleReport:
     """

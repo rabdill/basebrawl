@@ -79,7 +79,7 @@ def load_saloon(rosterpath='rosters.csv'):
                 print(f'\n{team1}: {results[0]}\n{team2}: {results[1]}')
                 report = simulation.Generate_report(*results, teams[team1], teams[team2])
                 to_record.append(report)
-    simulation.Record_reports(to_record, fighters)
+    simulation.Record_reports(to_record, fighters, teams)
 
     # figure out how to get fighting stats from batting stats
 
