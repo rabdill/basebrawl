@@ -59,6 +59,7 @@ class Fighter:
             x['tags'].append('hobbit')
         if self.slugger:
             x['tags'].append('slugger')
+            x['fighter_stats']['haymaker'] = self.haymaker
 
         return(x)
 
@@ -120,7 +121,7 @@ class Fighter:
                 self.speed = 3
             else:
                 self.speed = 1
-        # If a player hits it really hard, they have
+        # If a player hits it really hard, they have a chance to throw superpunches
         if data['exit_velocity'] > 81:
             self.slugger = True
             self.haymaker = min([data['whiff_percent'], data['k_percent']])
