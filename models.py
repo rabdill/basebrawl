@@ -22,6 +22,9 @@ class Fighter:
         ### Special tags
         self.meathead = False # Every hit gets more strength and less accuracy
         self.heavyweight = False # Strength and health bonus
+        self.bigreach = False
+        self.hobbit = False
+        self.gimli = False
 
     def print(self):
         """
@@ -46,6 +49,12 @@ class Fighter:
             x['tags'].append('meathead')
         if self.heavyweight:
             x['tags'].append('heavyweight')
+        if self.bigreach:
+            x['tags'].append('bigreach')
+        if self.gimli:
+            x['tags'].append('gimli')
+        if self.hobbit:
+            x['tags'].append('hobbit')
 
         return(x)
 
@@ -108,11 +117,25 @@ class Fighter:
             else:
                 self.speed = 1
             self.name += ' MEAT'
-        if self.weight > 230:
+        if self.weight > 225: # lower for batters than hitters
             self.heavyweight = True
             self.max_health = int(math.ceil(self.max_health * 1.15))
             self.strength += 15
             self.min_hit += 5
+        if self.height > 74:
+            self.bigreach = True
+            self.strength += 5
+            self.dodge = int(math.ceil(self.dodge * 1.15))
+        if self.height < 72:
+            if self.weight < 190:
+                self.hobbit = True
+                self.dodge = int(math.ceil(self.dodge * 1.5))
+                self.speed = int(math.ceil(self.speed * 1.2))
+            elif self.weight > 220:
+                self.gimli = True
+                self.strength += 5
+                self.min_hit += 5
+                self.dodge = int(math.ceil(self.dodge * 1.15))
 
     def convert_pitcher(self, data, measurements):
         """
@@ -166,6 +189,20 @@ class Fighter:
             self.max_health = int(math.ceil(self.max_health * 1.15))
             self.strength += 15
             self.min_hit += 5
+        if self.height > 76:
+            self.bigreach = True
+            self.strength += 5
+            self.dodge = int(math.ceil(self.dodge * 1.15))
+        if self.height < 72:
+            if self.weight < 190:
+                self.hobbit = True
+                self.dodge = int(math.ceil(self.dodge * 1.5))
+                self.speed = int(math.ceil(self.speed * 1.2))
+            elif self.weight > 220:
+                self.gimli = True
+                self.strength += 5
+                self.min_hit += 5
+                self.dodge = int(math.ceil(self.dodge * 1.15))
 
     def debug_entry(self, health=300, strength=50, speed=3, punch_whiff=10, min_hit=1, dodge=31):
         self.health = health
