@@ -116,7 +116,6 @@ class Fighter:
                 self.speed = 3
             else:
                 self.speed = 1
-            self.name += ' MEAT'
         if self.weight > 225: # lower for batters than hitters
             self.heavyweight = True
             self.max_health = int(math.ceil(self.max_health * 1.15))
@@ -251,7 +250,11 @@ class Fighter:
         """
 
         # first determine if the hit lands
-        minmiss = -10 if self.meathead else 1 # meatheads less likely to land
+        minmiss = 1
+        if self.meathead: # meatheads less likely to land
+            minmiss -= 10
+        if opponent.hobbit: # tricksy hobbitses hard to hit yes yes
+            minmiss -= 8
         miss = random.randint(minmiss, 100) < self.punch_whiff
 
         if miss:
@@ -266,6 +269,10 @@ class Fighter:
         dam = random.randint(self.min_hit, self.strength)
         if self.meathead:
             dam += 10
+        if opponent.gimli:
+            dam -= 5
+            if dam < 1:
+                dam = 1
         return(dam)
 
     def attack(self, opponent):
@@ -285,7 +292,7 @@ class Fighter:
         # by the fighter's speed trait.
         attacks_todo = 1
         dice = random.randint(0,10)
-        if dice < self.speed:
+        if dice < self.speed: # sometimes we skip this and just do 1 attack
             attacks_todo = random.randint(0, self.speed)
 
 
