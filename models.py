@@ -18,6 +18,7 @@ class Fighter:
         self.speed = None # how many hits can you get into one attack?
         self.min_hit = None # what's the floor for how much (unmodified) damage a hit can do?
         self.dodge = None
+        self.haymaker = None
 
         ### Special tags
         self.meathead = False # Every hit gets more strength and less accuracy
@@ -25,6 +26,7 @@ class Fighter:
         self.bigreach = False
         self.hobbit = False
         self.gimli = False
+        self.slugger = False
 
     def print(self):
         """
@@ -55,6 +57,8 @@ class Fighter:
             x['tags'].append('gimli')
         if self.hobbit:
             x['tags'].append('hobbit')
+        if self.slugger:
+            x['tags'].append('slugger')
 
         return(x)
 
@@ -116,6 +120,10 @@ class Fighter:
                 self.speed = 3
             else:
                 self.speed = 1
+        # If a player hits it really hard, they have
+        if data['exit_velocity'] > 81:
+            self.slugger = True
+            self.haymaker = min([data['whiff_percent'], data['k_percent']])
         if self.weight > 225: # lower for batters than hitters
             self.heavyweight = True
             self.max_health = int(math.ceil(self.max_health * 1.15))
@@ -249,6 +257,7 @@ class Fighter:
         Separating out the ever-growing logic used to determine damage
         """
 
+
         # first determine if the hit lands
         minmiss = 1
         if self.meathead: # meatheads less likely to land
@@ -273,6 +282,12 @@ class Fighter:
             dam -= 5
             if dam < 1:
                 dam = 1
+
+        # if they're a slugger, roll dice to see if they really lean into it:
+        if self.slugger:
+            thrown = random.randint(0, 100) < self.haymaker
+            if thrown:
+                dam = dam * 1.5
         return(dam)
 
     def attack(self, opponent):
