@@ -82,6 +82,13 @@ function Player_Tip(player) {
             <li>${trait}: ${players[player]['fighter_stats'][trait]}</li>
         `
     }
+    if(players[player]['tags'].includes('meathead')) {
+        towrite += "<li>MEATHEAD</li>"
+    }
+    if(players[player]['tags'].includes('heavyweight')) {
+        towrite += "<li>HEAVYWEIGHT</li>"
+    }
+    towrite += "</ul>"
     return(towrite)
 }
 

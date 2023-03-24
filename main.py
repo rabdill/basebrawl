@@ -1,3 +1,4 @@
+import csv
 import sys
 
 import fighting
@@ -7,7 +8,12 @@ import simulation
 def load_saloon(rosterpath='rosters.csv'):
     batters = {}
     pitchers = {}
-
+    measurements = {}
+    with open('player_measurements.csv','r', encoding='utf-8-sig') as infile:
+        reader = csv.reader(infile)
+        next(reader)
+        for row in reader:
+            measurements[row[0]] = {'weight': int(row[1]), 'height': int(row[2])}
     with open('batter_percentiles.csv', 'r', encoding='utf-8-sig') as infile:
         headers = infile.readline()[:-1].split(',')
 
@@ -54,11 +60,10 @@ def load_saloon(rosterpath='rosters.csv'):
 
         playerdata = pitchers.get(player_name)
         if playerdata is not None:
-            newb.convert_pitcher(playerdata)
+            newb.convert_pitcher(playerdata, measurements[player_name])
         else:
             playerdata = batters.get(player_name)
-            newb.convert_batter(playerdata)
-
+            newb.convert_batter(playerdata, measurements[player_name])
         teams[team_name].add_fighter(newb)
         fighters.append(newb)
 

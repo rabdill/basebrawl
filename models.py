@@ -21,6 +21,7 @@ class Fighter:
 
         ### Special tags
         self.meathead = False # Every hit gets more strength and less accuracy
+        self.heavyweight = False # Strength and health bonus
 
     def print(self):
         """
@@ -43,6 +44,8 @@ class Fighter:
 
         if self.meathead:
             x['tags'].append('meathead')
+        if self.heavyweight:
+            x['tags'].append('heavyweight')
 
         return(x)
 
@@ -56,13 +59,15 @@ class Fighter:
         ])
         return(f'{joined}\n')
 
-    def convert_batter(self, data):
+    def convert_batter(self, data, measurements):
         """
         INPUT:
             data - Parses a single line of the statcast CSV batter data.
         """
         self.debug_entry()
         self.fancyname = '🪖 ' + self.name
+        self.height = measurements['height']
+        self.weight = measurements['weight']
         # xwoba
         # xba
         # xslg
@@ -95,7 +100,7 @@ class Fighter:
         # percentiles are more than 25 apart, label them a meathead
         if data['xslg'] > 55 and data['xba'] < 45 and data['xslg']-data['xba'] > 25:
             self.meathead = True
-            self.max_health = int(math.ceil(self.max_health * 1.5))
+            self.max_health = int(math.ceil(self.max_health * 1.25))
             if self.speed > 8:
                 self.speed = 5
             elif self.speed > 5:
@@ -103,14 +108,21 @@ class Fighter:
             else:
                 self.speed = 1
             self.name += ' MEAT'
+        if self.weight > 230:
+            self.heavyweight = True
+            self.max_health = int(math.ceil(self.max_health * 1.15))
+            self.strength += 15
+            self.min_hit += 5
 
-    def convert_pitcher(self, data):
+    def convert_pitcher(self, data, measurements):
         """
         INPUT:
             data - Parses a single line of the statcast CSV pitching data.
         """
         self.debug_entry()
         self.fancyname = '⚾ ' + self.name
+        self.height = measurements['height']
+        self.weight = measurements['weight']
         # xwoba
         # xba
         # xslg
@@ -149,7 +161,11 @@ class Fighter:
             self.meathead = True
             self.max_health = int(math.ceil(self.max_health * 1.5))
             self.speed = 2
-            self.name += ' PITCHMEAT'
+        if self.weight > 230:
+            self.heavyweight = True
+            self.max_health = int(math.ceil(self.max_health * 1.15))
+            self.strength += 15
+            self.min_hit += 5
 
     def debug_entry(self, health=300, strength=50, speed=3, punch_whiff=10, min_hit=1, dodge=31):
         self.health = health
