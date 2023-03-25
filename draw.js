@@ -102,6 +102,9 @@ function SetTeam(selectbox, num) {
         team2 = team
     }
     Display_Matchup()
+    // initialize the tooltips once they're written
+    var tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    var tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 }
 
 team1 = 'South Jersey Schlemiels'
@@ -110,6 +113,3 @@ team2 = 'Daily Todays'
 teams = Object.keys(alldata)
 Write_Team_Dropdowns(teams)
 SetTeam(team1, 1) // just print whatever the first matchup is
-
-const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
