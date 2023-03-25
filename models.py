@@ -130,6 +130,7 @@ class Fighter:
             self.max_health = int(math.ceil(self.max_health * 1.15))
             self.strength += 15
             self.min_hit += 5
+            self.dodge = int(math.ceil(self.dodge / 2))
         if self.height > 74:
             self.bigreach = True
             self.strength += 5
@@ -143,7 +144,7 @@ class Fighter:
                 self.gimli = True
                 self.strength += 5
                 self.min_hit += 5
-                self.dodge = int(math.ceil(self.dodge * 1.15))
+                self.dodge = int(math.ceil(self.dodge * 0.85))
 
     def convert_pitcher(self, data, measurements):
         """
@@ -180,15 +181,15 @@ class Fighter:
             self.speed = 1
 
         denom = 2
-        if int(data['xiso']) < 50:
+        if int(data['xiso']) < 45:
             denom = 2.5 # nerf the pitchers that give up extra bases
         self.strength = int(math.ceil(data['fb_velocity'] / denom))
-        self.min_hit = int(math.floor(self.strength * (data['brl_percent'] / 100)))
+        self.min_hit = int(math.floor(self.strength * (data['brl_percent'] / 110)))
         self.dodge = int(data['hard_hit_percent'])
 
         # If a player slugs above average, has a below-average BA, and the
         # percentiles are more than 25 apart, label them a meathead
-        if data['fb_velocity'] > 55 and data['bb_percent'] < 45 and data['fb_velocity']-data['bb_percent'] > 25:
+        if data['fb_velocity'] > 60 and data['bb_percent'] < 40 and data['fb_velocity']-data['bb_percent'] > 25:
             self.meathead = True
             self.max_health = int(math.ceil(self.max_health * 1.5))
             self.speed = 2
@@ -278,7 +279,7 @@ class Fighter:
         # Then determine how much damage is done:
         dam = random.randint(self.min_hit, self.strength)
         if self.meathead:
-            dam += 10
+            dam += 18
         if opponent.gimli:
             dam -= 5
             if dam < 1:
